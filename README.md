@@ -14,7 +14,9 @@ python3 -m http.server 8000   # then open http://localhost:8000
 4. Commit and push; GitHub Pages redeploys automatically.
 
 You can also edit `js/content.js` by hand. Card images go in `assets/` (square-ish images look best).
-The text in `js/content.js` is placeholder draft copy — replace and cite your sources.
+Cards with an empty `source` show an "Unverified draft" tag; fill in the Source field and the tag disappears. Draft copy is placeholder text — verify and cite.
+
+`js/data.js` just picks between the published content and the editor's `?draft` preview.
 
 ## Controls
 Scroll / swipe / arrow keys advance the timeline; scrolling back from card 1 returns to the title page.

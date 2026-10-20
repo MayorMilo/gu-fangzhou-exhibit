@@ -41,6 +41,7 @@ textarea{min-height:110px;resize:vertical}
   <button id="preview">Preview timeline</button>
   <button id="previewTitle">Preview title</button>
   <button id="load">Load content.js…</button>
+  <button id="discard" title="Throw away unsaved edits and go back to the published js/content.js">Discard draft</button>
   <button class="primary" id="download">Download content.js</button>
   <input type="file" id="file" accept=".js,.json" hidden>
 </header>
@@ -49,7 +50,7 @@ textarea{min-height:110px;resize:vertical}
     <ol>
       <li>Edit below. Changes autosave as a draft in this browser; use <i>Preview</i> to see them.</li>
       <li>Click <i>Download content.js</i> and replace <code>js/content.js</code> in the project.</li>
-      <li>Put any image files in <code>assets/</code> and type the path (e.g. <code>assets/letter.jpg</code>), or click <i>Upload</i> to embed a resized copy directly.</li>
+      <li><b>Best for images:</b> save the file into <code>assets/</code> and type its path (e.g. <code>assets/letter.jpg</code>). <i>Upload</i> embeds a resized copy inside content.js — fine for a few images, but it makes the file large.</li>
       <li>Commit &amp; push (or upload to GitHub) — the live site updates in about a minute.</li>
     </ol></div>
   <section class="box" id="siteBox"></section>
@@ -64,10 +65,12 @@ textarea{min-height:110px;resize:vertical}
 (function(){
   var KEY = 'exhibit-draft';
   var data = JSON.parse(JSON.stringify(window.EXHIBIT));
-  try { var d = localStorage.getItem(KEY); if(d && confirm('Restore your unsaved draft from this browser?')) data = JSON.parse(d); } catch(e){}
+  var restored = false;
+  try { var d = localStorage.getItem(KEY); if(d){ data = JSON.parse(d); restored = true; } } catch(e){}
   var $ = function(id){ return document.getElementById(id); };
   var siteFields = [['name','Name'],['nameZh','Chinese name'],['dates','Life dates'],['tagline','Tagline'],['scrollHint','Scroll prompt text']];
 
+  var uid = 0;
   function save(){
     try { localStorage.setItem(KEY, JSON.stringify(data)); $('status').textContent = 'Draft saved ' + new Date().toLocaleTimeString(); }
     catch(e){ $('status').textContent = 'Draft too large for browser storage — download your file.'; }
@@ -79,9 +82,10 @@ textarea{min-height:110px;resize:vertical}
   }
   function field(label, obj, key, multiline){
     var inp = el(multiline ? 'textarea' : 'input', multiline ? {} : {type:'text'});
+    var id = 'f' + (++uid); inp.id = id;
     inp.value = obj[key] || '';
     inp.addEventListener('input', function(){ obj[key] = inp.value; save(); });
-    return [el('label',{text:label}), inp];
+    return [el('label',{text:label,for:id}), inp];
   }
   function imageField(obj, key){
     var img = el('img',{alt:''}); img.src = obj[key] || '';
@@ -145,8 +149,15 @@ textarea{min-height:110px;resize:vertical}
   $('preview').addEventListener('click', function(){ save(); window.open('timeline.html?draft','_blank'); });
   $('previewTitle').addEventListener('click', function(){ save(); window.open('index.html?draft','_blank'); });
   $('download').addEventListener('click', function(){
-    var txt = '/* Exported from admin.html on ' + new Date().toISOString().slice(0,10) + ' */\nwindow.EXHIBIT = ' + JSON.stringify(data, null, 2) + ';\n';
+    var txt = '/* EXHIBIT CONTENT — edit via admin.html, or by hand. Exported ' + new Date().toISOString().slice(0,10) + ' */\nwindow.EXHIBIT = ' + JSON.stringify(data, null, 2) + ';\n';
     var a = el('a',{href:URL.createObjectURL(new Blob([txt],{type:'text/javascript'})),download:'content.js'}); a.click();
+    try { localStorage.removeItem(KEY); } catch(e){}
+    $('status').textContent = 'Downloaded. Replace js/content.js with this file, then push. Draft cleared.';
+  });
+  $('discard').addEventListener('click', function(){
+    if(!confirm('Discard unsaved edits and reload the published content?')) return;
+    try { localStorage.removeItem(KEY); } catch(e){}
+    location.reload();
   });
   $('load').addEventListener('click', function(){ $('file').click(); });
   $('file').addEventListener('change', function(){
@@ -161,6 +172,7 @@ textarea{min-height:110px;resize:vertical}
     r.readAsText(f);
   });
   renderSite(); renderCards();
+  if(restored) $('status').textContent = 'Restored your unsaved draft';
 })();
 </script>
 </body>

@@ -3,6 +3,5 @@
 <pattern id="p" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#000" opacity=".12"/></pattern></defs>
 <rect width="800" height="800" fill="url(#g)"/><rect width="800" height="800" fill="url(#p)"/>
 <rect x="40" y="40" width="720" height="720" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2"/>
-<circle cx="400" cy="340" r="110" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="3"/>
-<path d="M240 620 Q400 440 560 620" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="3"/>
+<g stroke="#fff" stroke-opacity=".75" stroke-width="3"><path d="M240 520 V380 Q280 280 330 380 V520 M370 520 V340 Q420 220 470 340 V520 M510 520 V400 Q540 320 570 400 V520" fill="none"/></g>
 <text x="400" y="720" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="30" letter-spacing="6" fill="#fff" fill-opacity=".85">MOCK ARTIFACT · MOSCOW</text></svg>

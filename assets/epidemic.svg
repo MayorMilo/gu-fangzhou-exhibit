@@ -3,6 +3,5 @@
 <pattern id="p" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#000" opacity=".12"/></pattern></defs>
 <rect width="800" height="800" fill="url(#g)"/><rect width="800" height="800" fill="url(#p)"/>
 <rect x="40" y="40" width="720" height="720" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2"/>
-<circle cx="400" cy="340" r="110" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="3"/>
-<path d="M240 620 Q400 440 560 620" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="3"/>
+<g stroke="#fff" stroke-opacity=".75" stroke-width="3"><path d="M240 520 H560 M280 520 V360 M360 520 V320 M440 520 V380 M520 520 V300" fill="none"/></g>
 <text x="400" y="720" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="30" letter-spacing="6" fill="#fff" fill-opacity=".85">MOCK ARTIFACT · EPIDEMIC</text></svg>

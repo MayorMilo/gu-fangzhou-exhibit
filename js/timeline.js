@@ -10,8 +10,8 @@
   var S, BIG, GAP, CX;
   cards.forEach(function(c, i){
     var b = document.createElement('button');
-    b.className = 'card'; b.setAttribute('role','listitem'); b.setAttribute('aria-label', c.year + ' — ' + c.title);
-    var im = document.createElement('img'); im.src = c.image; im.alt = ''; im.draggable = false;
+    b.className = 'card'; b.setAttribute('aria-label', c.year + ' — ' + c.title);
+    var im = document.createElement('img'); im.src = c.image; im.alt = c.caption || c.title; im.draggable = false;
     b.appendChild(im);
     b.addEventListener('click', function(){ go(i); });
     track.appendChild(b); els.push(b);
@@ -35,8 +35,8 @@
   var swapTimer;
   function render(animate){
     track.style.transform = 'translateX(' + (CX - cur * GAP) + 'px)';
-    els.forEach(function(e, i){ e.classList.toggle('active', i === cur); e.tabIndex = i === cur ? -1 : 0; });
-    ticks.forEach(function(t, i){ t.classList.toggle('active', i === cur); });
+    els.forEach(function(e, i){ e.classList.toggle('active', i === cur); });
+    ticks.forEach(function(t, i){ t.classList.toggle('hide', i === cur); t.classList.toggle('near', Math.abs(i - cur) === 1); });
     $('prog').style.width = (n > 1 ? cur / (n - 1) * 100 : 100) + '%';
     $('count').textContent = String(cur + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0');
     $('prev').disabled = false; $('next').disabled = cur === n - 1;
@@ -44,6 +44,8 @@
     function fill(){
       $('iYear').textContent = c.year; $('iTitle').textContent = c.title; $('iBody').textContent = c.body;
       $('iCap').textContent = c.caption || ''; $('iSrc').textContent = c.source ? 'Source: ' + c.source : '';
+      $('iDraft').hidden = !!(c.source && c.source.trim());
+      $('iBack').hidden = cur !== n - 1; $('iBack').href = 'index.html' + draftSuffix;
       info.classList.remove('swap');
     }
     clearTimeout(swapTimer);
@@ -52,9 +54,15 @@
 
   var locked = false;
   function go(i){
-    if(i < 0){ leave(); return; }
+    if(i < 0){ tryLeave(); return; }
     if(i > n - 1 || i === cur) return;
-    cur = i; render(true);
+    cur = i; armed = false; $('leaveHint').classList.remove('on'); render(true);
+  }
+  var armed = false, armTimer;
+  function tryLeave(){
+    if(armed){ leave(); return; }
+    armed = true; $('leaveHint').classList.add('on');
+    clearTimeout(armTimer); armTimer = setTimeout(function(){ armed = false; $('leaveHint').classList.remove('on'); }, 2200);
   }
   function leave(){
     document.body.classList.add('leaving');
