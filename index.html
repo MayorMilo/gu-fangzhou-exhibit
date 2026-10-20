@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gu Fangzhou — A Digital Exhibit</title>
+<meta name="description" content="A digital exhibit on Gu Fangzhou, the virologist known as the father of the polio vaccine in China.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main class="title-page" id="title">
+  <svg class="mountains" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M60 400 L330 40 L620 400"/>
+    <path d="M360 400 L620 60 L900 400"/>
+    <path d="M660 400 L930 20 L1160 400"/>
+  </svg>
+  <section class="hero">
+    <img class="portrait" id="portrait" alt="Portrait of Gu Fangzhou">
+    <div class="name-block">
+      <p class="eyebrow">Digital Exhibit</p>
+      <h1 id="name"></h1>
+      <p class="name-zh" id="nameZh"></p>
+      <p class="dates" id="dates"></p>
+      <p class="tagline" id="tagline"></p>
+    </div>
+  </section>
+  <button class="scroll-cue" id="cue" aria-label="Enter the exhibit">
+    <span id="hint"></span>
+    <svg width="22" height="34" viewBox="0 0 22 34" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 2v28M3 22l8 9 8-9"/></svg>
+  </button>
+</main>
+<script src="js/content.js"></script>
+<script src="js/data.js"></script>
+<script>
+(function(){
+  var s = DATA.site;
+  document.getElementById('name').textContent = s.name;
+  document.getElementById('nameZh').textContent = s.nameZh || '';
+  document.getElementById('dates').textContent = s.dates;
+  document.getElementById('tagline').textContent = s.tagline;
+  document.getElementById('hint').textContent = s.scrollHint;
+  var p = document.getElementById('portrait'); p.src = s.portrait;
+  if(!s.nameZh) document.getElementById('nameZh').hidden = true;
+
+  var going = false, acc = 0, touchY = null;
+  function enter(){
+    if(going) return; going = true;
+    document.body.classList.add('leaving');
+    setTimeout(function(){ location.href = 'timeline.html' + draftSuffix; }, 450);
+  }
+  window.addEventListener('wheel', function(e){ acc += e.deltaY; if(acc > 30) enter(); if(acc < -200) acc = 0; }, {passive:true});
+  window.addEventListener('touchstart', function(e){ touchY = e.touches[0].clientY; }, {passive:true});
+  window.addEventListener('touchmove', function(e){ if(touchY !== null && touchY - e.touches[0].clientY > 30) enter(); }, {passive:true});
+  window.addEventListener('keydown', function(e){ if(['ArrowDown','PageDown',' ','Enter','ArrowRight'].indexOf(e.key) > -1){ e.preventDefault(); enter(); } });
+  document.getElementById('cue').addEventListener('click', enter);
+  window.addEventListener('pageshow', function(){ going = false; acc = 0; document.body.classList.remove('leaving'); });
+})();
+</script>
+</body>
+</html>

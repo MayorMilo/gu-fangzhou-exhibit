@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Timeline — Gu Fangzhou Exhibit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="stage" id="stage">
+  <header class="topbar">
+    <a id="home" class="eyebrow" href="index.html">← Gu Fangzhou</a>
+    <span class="eyebrow" id="dates"></span>
+  </header>
+  <p class="heading" id="heading"></p>
+  <div class="axis"></div>
+  <div class="track" id="track" role="list"></div>
+  <article class="info" id="info" aria-live="polite">
+    <div class="inner">
+      <p class="year" id="iYear"></p>
+      <h2 id="iTitle"></h2>
+      <p class="body" id="iBody"></p>
+      <p class="cap" id="iCap"></p>
+      <p class="src" id="iSrc"></p>
+    </div>
+  </article>
+  <footer class="hud">
+    <span class="count" id="count"></span>
+    <div class="bar"><i id="prog"></i></div>
+    <div class="nav"><button id="prev" aria-label="Previous card">←</button><button id="next" aria-label="Next card">→</button></div>
+  </footer>
+</div>
+<script src="js/content.js"></script>
+<script src="js/data.js"></script>
+<script src="js/timeline.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Exhibit Editor</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f2ee;--ink:#1a1a19;--muted:#77736b;--line:#d8d4cc;--card:#fff;--accent:#8a6d3b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Inter Tight","Helvetica Neue",Arial,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--ink);color:#fff;padding:.8rem 1.4rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+header h1{font-size:1rem;font-weight:500;margin:0 auto 0 0;letter-spacing:.08em;text-transform:uppercase}
+button,.btn{font:inherit;background:#fff;color:var(--ink);border:1px solid var(--line);padding:.45rem .9rem;border-radius:4px;cursor:pointer}
+button:hover{border-color:var(--ink)}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.danger{color:#a33}
+main{max-width:860px;margin:0 auto;padding:1.4rem}
+.help{background:#fff;border-left:3px solid var(--accent);padding:.8rem 1rem;margin-bottom:1.4rem;color:#444;font-size:.9rem}
+.help ol{margin:.4rem 0 0 1.1rem;padding:0}
+section.box,.item{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1rem 1.1rem;margin-bottom:1rem}
+h2{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 .8rem;font-weight:500}
+label{display:block;font-size:.8rem;color:var(--muted);margin:.7rem 0 .2rem}
+input[type=text],textarea{width:100%;font:inherit;padding:.5rem .6rem;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink)}
+textarea{min-height:110px;resize:vertical}
+.row{display:grid;grid-template-columns:110px 1fr;gap:.8rem}
+.img-row{display:flex;gap:.8rem;align-items:flex-start;margin-top:.3rem}
+.img-row img{width:84px;height:84px;object-fit:cover;border:1px solid var(--line);background:#eee}
+.img-row .f{flex:1}
+.tools{display:flex;gap:.4rem;margin-top:.9rem;flex-wrap:wrap;align-items:center}
+.item h3{margin:0;font-size:1rem;font-weight:500}
+.item .top{display:flex;justify-content:space-between;align-items:center}
+.status{font-size:.8rem;color:#bbb}
+</style>
+</head>
+<body>
+<header>
+  <h1>Exhibit Editor</h1>
+  <span class="status" id="status"></span>
+  <button id="preview">Preview timeline</button>
+  <button id="previewTitle">Preview title</button>
+  <button id="load">Load content.js…</button>
+  <button class="primary" id="download">Download content.js</button>
+  <input type="file" id="file" accept=".js,.json" hidden>
+</header>
+<main>
+  <div class="help"><b>How to publish your edits</b>
+    <ol>
+      <li>Edit below. Changes autosave as a draft in this browser; use <i>Preview</i> to see them.</li>
+      <li>Click <i>Download content.js</i> and replace <code>js/content.js</code> in the project.</li>
+      <li>Put any image files in <code>assets/</code> and type the path (e.g. <code>assets/letter.jpg</code>), or click <i>Upload</i> to embed a resized copy directly.</li>
+      <li>Commit &amp; push (or upload to GitHub) — the live site updates in about a minute.</li>
+    </ol></div>
+  <section class="box" id="siteBox"></section>
+  <section class="box"><h2>Timeline</h2>
+    <label>Heading (small text under the top bar)</label><input type="text" id="heading">
+  </section>
+  <div id="cards"></div>
+  <button id="add" class="primary">+ Add card</button>
+</main>
+<script src="js/content.js"></script>
+<script>
+(function(){
+  var KEY = 'exhibit-draft';
+  var data = JSON.parse(JSON.stringify(window.EXHIBIT));
+  try { var d = localStorage.getItem(KEY); if(d && confirm('Restore your unsaved draft from this browser?')) data = JSON.parse(d); } catch(e){}
+  var $ = function(id){ return document.getElementById(id); };
+  var siteFields = [['name','Name'],['nameZh','Chinese name'],['dates','Life dates'],['tagline','Tagline'],['scrollHint','Scroll prompt text']];
+
+  function save(){
+    try { localStorage.setItem(KEY, JSON.stringify(data)); $('status').textContent = 'Draft saved ' + new Date().toLocaleTimeString(); }
+    catch(e){ $('status').textContent = 'Draft too large for browser storage — download your file.'; }
+  }
+  function el(tag, attrs, kids){
+    var e = document.createElement(tag);
+    for(var k in (attrs||{})){ if(k==='text') e.textContent = attrs[k]; else if(k.slice(0,2)==='on') e.addEventListener(k.slice(2), attrs[k]); else e.setAttribute(k, attrs[k]); }
+    (kids||[]).forEach(function(c){ e.appendChild(c); }); return e;
+  }
+  function field(label, obj, key, multiline){
+    var inp = el(multiline ? 'textarea' : 'input', multiline ? {} : {type:'text'});
+    inp.value = obj[key] || '';
+    inp.addEventListener('input', function(){ obj[key] = inp.value; save(); });
+    return [el('label',{text:label}), inp];
+  }
+  function imageField(obj, key){
+    var img = el('img',{alt:''}); img.src = obj[key] || '';
+    var path = el('input',{type:'text'}); path.value = (obj[key]||'').indexOf('data:') === 0 ? '(uploaded image embedded)' : (obj[key]||'');
+    path.addEventListener('input', function(){ obj[key] = path.value; img.src = path.value; save(); });
+    var file = el('input',{type:'file',accept:'image/*',hidden:''});
+    file.addEventListener('change', function(){
+      var f = file.files[0]; if(!f) return;
+      var r = new FileReader();
+      r.onload = function(){
+        var im = new Image();
+        im.onload = function(){
+          var m = 1000, s = Math.min(1, m / Math.max(im.width, im.height));
+          var c = document.createElement('canvas'); c.width = Math.round(im.width*s); c.height = Math.round(im.height*s);
+          c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+          obj[key] = c.toDataURL('image/jpeg', .82); img.src = obj[key]; path.value = '(uploaded image embedded)'; save();
+        };
+        im.src = r.result;
+      };
+      r.readAsDataURL(f);
+    });
+    return [el('label',{text:'Image (path in assets/ or upload)'}),
+      el('div',{class:'img-row'},[img, el('div',{class:'f'},[path, el('div',{class:'tools'},[el('button',{text:'Upload image…',onclick:function(){file.click();}}), file])])])];
+  }
+
+  function renderSite(){
+    var box = $('siteBox'); box.innerHTML = '';
+    box.appendChild(el('h2',{text:'Title page'}));
+    siteFields.forEach(function(f){ field(f[1], data.site, f[0]).forEach(function(x){ box.appendChild(x); }); });
+    imageField(data.site,'portrait').forEach(function(x){ box.appendChild(x); });
+    $('heading').value = data.timeline.heading || '';
+  }
+  $('heading').addEventListener('input', function(){ data.timeline.heading = $('heading').value; save(); });
+
+  function renderCards(){
+    var wrap = $('cards'); wrap.innerHTML = '';
+    data.timeline.cards.forEach(function(c, i){
+      var it = el('div',{class:'item'});
+      it.appendChild(el('div',{class:'top'},[el('h3',{text:(i+1)+'. '+(c.title||'Untitled')}),
+        el('div',{class:'tools'},[
+          el('button',{text:'↑',title:'Move earlier',onclick:function(){ mv(i,-1); }}),
+          el('button',{text:'↓',title:'Move later',onclick:function(){ mv(i,1); }}),
+          el('button',{class:'danger',text:'Delete',onclick:function(){ if(confirm('Delete this card?')){ data.timeline.cards.splice(i,1); save(); renderCards(); } }})])]));
+      var yr = field('Year / date label', c, 'year'), tt = field('Card title', c, 'title');
+      it.appendChild(el('div',{class:'row'},[el('div',{},yr), el('div',{},tt)]));
+      field('Body text', c, 'body', true).forEach(function(x){ it.appendChild(x); });
+      imageField(c,'image').forEach(function(x){ it.appendChild(x); });
+      field('Image caption', c, 'caption').forEach(function(x){ it.appendChild(x); });
+      field('Source / citation', c, 'source').forEach(function(x){ it.appendChild(x); });
+      wrap.appendChild(it);
+    });
+  }
+  function mv(i, d){
+    var a = data.timeline.cards, j = i + d; if(j<0||j>=a.length) return;
+    var t = a[i]; a[i] = a[j]; a[j] = t; save(); renderCards();
+  }
+  $('add').addEventListener('click', function(){
+    data.timeline.cards.push({year:'Year',title:'New card',body:'',image:'assets/reflection.svg',caption:'',source:''});
+    save(); renderCards(); window.scrollTo(0, document.body.scrollHeight);
+  });
+  $('preview').addEventListener('click', function(){ save(); window.open('timeline.html?draft','_blank'); });
+  $('previewTitle').addEventListener('click', function(){ save(); window.open('index.html?draft','_blank'); });
+  $('download').addEventListener('click', function(){
+    var txt = '/* Exported from admin.html on ' + new Date().toISOString().slice(0,10) + ' */\nwindow.EXHIBIT = ' + JSON.stringify(data, null, 2) + ';\n';
+    var a = el('a',{href:URL.createObjectURL(new Blob([txt],{type:'text/javascript'})),download:'content.js'}); a.click();
+  });
+  $('load').addEventListener('click', function(){ $('file').click(); });
+  $('file').addEventListener('change', function(){
+    var f = $('file').files[0]; if(!f) return;
+    var r = new FileReader();
+    r.onload = function(){
+      try {
+        var m = r.result.match(/window\.EXHIBIT\s*=\s*([\s\S]*?);?\s*$/);
+        data = JSON.parse(m ? m[1] : r.result); save(); renderSite(); renderCards();
+      } catch(e){ alert('Could not read that file: ' + e.message); }
+    };
+    r.readAsText(f);
+  });
+  renderSite(); renderCards();
+})();
+</script>
+</body>
+</html>
