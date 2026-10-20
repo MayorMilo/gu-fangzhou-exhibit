@@ -15,7 +15,7 @@ window.EXHIBIT = {
       {
         "year": "1926",
         "title": "Early life",
-        "body": "Gu Fangzhou is born in 1926. Use this card for family background and his childhood, and for how early encounters with illness may have shaped his path.",
+        "body": "Gu Fangzhou is born in 1926. His family background and childhood, and the early encounters with illness that may have shaped his path, open the exhibit.",
         "image": "assets/early-life.svg",
         "caption": "Mock artifact: replace with a family photograph or document.",
         "source": ""
@@ -23,7 +23,7 @@ window.EXHIBIT = {
       {
         "year": "c. 1951",
         "title": "Medical training",
-        "body": "Gu completes his medical training and moves into public health and virology work. Describe the institutions, mentors and the state of Chinese medicine at the time.",
+        "body": "Gu completes his medical training and moves into public health and virology work, at a time when China's medical institutions were being rebuilt and expanded.",
         "image": "assets/training.svg",
         "caption": "Mock artifact: replace with a diploma or campus photograph.",
         "source": ""
@@ -31,7 +31,7 @@ window.EXHIBIT = {
       {
         "year": "1955",
         "title": "Polio arrives",
-        "body": "In the 1950s, outbreaks of poliomyelitis strike Chinese cities and leave many children paralysed. This card sets the scene for lived experience in the time of polio: families, hospitals, fear.",
+        "body": "In the 1950s, outbreaks of poliomyelitis strike Chinese cities and leave many children paralysed. For families the disease meant fear, hospital wards and lifelong disability.",
         "image": "assets/epidemic.svg",
         "caption": "Mock artifact: replace with a period photograph or poster.",
         "source": ""
@@ -39,7 +39,7 @@ window.EXHIBIT = {
       {
         "year": "1957",
         "title": "Study in Moscow",
-        "body": "Gu travels abroad to study poliovirus and vaccine production, returning with the knowledge that would shape China's own vaccine program.",
+        "body": "Gu travels abroad to study poliovirus and vaccine production, bringing back the knowledge that would shape China's own vaccine program.",
         "image": "assets/moscow.svg",
         "caption": "Mock artifact: replace with a letter, passport or lab photograph.",
         "source": ""
@@ -47,7 +47,7 @@ window.EXHIBIT = {
       {
         "year": "1958",
         "title": "A laboratory in Kunming",
-        "body": "Gu is part of the effort to build a vaccine research base in Kunming, far from the capital. Describe why the location mattered and what daily work looked like.",
+        "body": "Gu is part of the effort to build a vaccine research base in Kunming, far from the capital, where the daily work of growing, testing and refining the virus strains begins.",
         "image": "assets/kunming.svg",
         "caption": "Mock artifact: replace with an image of the institute.",
         "source": ""
@@ -55,7 +55,7 @@ window.EXHIBIT = {
       {
         "year": "c. 1959–60",
         "title": "The trial",
-        "body": "During clinical trials of the live oral vaccine, Gu gives it to his own newborn son together with nine other children. Reflect here on risk, trust, responsibility, and the weight of the decision for a father and a scientist.",
+        "body": "During clinical trials of the live oral vaccine, Gu gives it to his own newborn son together with nine other children. The decision weighs risk against trust and responsibility, as both a father and a scientist.",
         "image": "assets/trial.svg",
         "caption": "Mock artifact: replace with a photograph or testimony.",
         "source": ""
@@ -63,7 +63,7 @@ window.EXHIBIT = {
       {
         "year": "1962",
         "title": "The sugar-coated pill",
-        "body": "The vaccine is reformulated as a sugar-coated pill that children eat like candy. Explain how it overcame cold-chain limits and could travel to remote villages.",
+        "body": "The vaccine is reformulated as a sugar-coated pill that children eat like candy. Easier to store and carry than liquid vaccine, it could travel to remote villages beyond the reach of refrigeration.",
         "image": "assets/candy-pill.svg",
         "caption": "Mock artifact: replace with a photograph of the pill.",
         "source": ""
@@ -71,7 +71,7 @@ window.EXHIBIT = {
       {
         "year": "2000",
         "title": "Polio-free",
-        "body": "In 2000 the WHO certifies the Western Pacific Region, including China, as polio-free. Connect the national vaccination effort to Gu's work and to the children who were protected.",
+        "body": "In 2000 the WHO certifies the Western Pacific Region, including China, as polio-free. The national vaccination effort that followed Gu's work protected generations of children.",
         "image": "assets/eradication.svg",
         "caption": "Mock artifact: replace with a certificate or vaccination-day photograph.",
         "source": ""
@@ -79,7 +79,7 @@ window.EXHIBIT = {
       {
         "year": "2019",
         "title": "Reflections",
-        "body": "Gu dies in 2019. Close with reflection: what it meant to test a vaccine on one's own child, and how families lived with polio and its risks.",
+        "body": "Gu dies in 2019. His story leaves open questions: what it meant to test a vaccine on one's own child, and how families lived with polio and its risks.",
         "image": "assets/reflection.svg",
         "caption": "Mock artifact: replace with a closing image.",
         "source": ""

@@ -1,6 +1,10 @@
 (function(){
   var cards = DATA.timeline.cards, n = cards.length, cur = 0;
   var $ = function(id){ return document.getElementById(id); };
+  if(!n){
+    document.body.innerHTML = '<p style="padding:3rem;font-family:sans-serif;color:#ccc">This exhibit has no cards yet. Add some in <a href="admin.html">admin.html</a>.</p>';
+    return;
+  }
   var track = $('track'), info = $('info'), stage = $('stage');
   $('heading').textContent = DATA.timeline.heading;
   $('dates').textContent = DATA.site.dates;
@@ -11,7 +15,7 @@
   cards.forEach(function(c, i){
     var b = document.createElement('button');
     b.className = 'card'; b.setAttribute('aria-label', c.year + ' — ' + c.title);
-    var im = document.createElement('img'); im.src = c.image; im.alt = c.caption || c.title; im.draggable = false;
+    var im = document.createElement('img'); im.onerror = function(){ im.onerror = null; im.src = 'assets/reflection.svg'; }; im.src = c.image; im.alt = c.caption || c.title; im.draggable = false;
     b.appendChild(im);
     b.addEventListener('click', function(){ go(i); });
     track.appendChild(b); els.push(b);
@@ -52,7 +56,7 @@
     if(animate){ info.classList.add('swap'); swapTimer = setTimeout(fill, 260); } else fill();
   }
 
-  var locked = false;
+  var lockUntil = 0;
   function go(i){
     if(i < 0){ tryLeave(); return; }
     if(i > n - 1 || i === cur) return;
@@ -69,13 +73,14 @@
     setTimeout(function(){ location.href = 'index.html' + draftSuffix; }, 450);
   }
   function step(d){
-    if(locked) return; locked = true; go(cur + d);
-    setTimeout(function(){ locked = false; }, 750);
+    if(Date.now() < lockUntil) return; lockUntil = Date.now() + 750; go(cur + d);
   }
 
   var acc = 0, accTimer;
   window.addEventListener('wheel', function(e){
     e.preventDefault();
+    var now = Date.now();
+    if(now < lockUntil){ lockUntil = Math.max(lockUntil, now + 150); acc = 0; return; }
     acc += e.deltaY + e.deltaX;
     clearTimeout(accTimer); accTimer = setTimeout(function(){ acc = 0; }, 160);
     if(Math.abs(acc) > 40){ step(acc > 0 ? 1 : -1); acc = 0; }
@@ -88,6 +93,8 @@
     if(Math.abs(dy) > 40 || Math.abs(dx) > 40){ step((Math.abs(dy) > Math.abs(dx) ? dy : dx) > 0 ? 1 : -1); ty = null; }
   }, {passive:true});
   window.addEventListener('keydown', function(e){
+    var t = e.target && e.target.tagName, onCtl = t === 'BUTTON' || t === 'A';
+    if(onCtl && (e.key === ' ' || e.key === 'Enter')) return;
     if(['ArrowDown','ArrowRight','PageDown',' '].indexOf(e.key) > -1){ e.preventDefault(); step(1); }
     if(['ArrowUp','ArrowLeft','PageUp'].indexOf(e.key) > -1){ e.preventDefault(); step(-1); }
     if(e.key === 'Home') go(0);

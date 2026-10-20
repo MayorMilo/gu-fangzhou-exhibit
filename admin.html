@@ -51,11 +51,12 @@ textarea{min-height:110px;resize:vertical}
       <li>Edit below. Changes autosave as a draft in this browser; use <i>Preview</i> to see them.</li>
       <li>Click <i>Download content.js</i> and replace <code>js/content.js</code> in the project.</li>
       <li><b>Best for images:</b> save the file into <code>assets/</code> and type its path (e.g. <code>assets/letter.jpg</code>). <i>Upload</i> embeds a resized copy inside content.js — fine for a few images, but it makes the file large.</li>
+      <li>After replacing the file, click <i>Discard draft</i> so previews show the published version.</li>
       <li>Commit &amp; push (or upload to GitHub) — the live site updates in about a minute.</li>
     </ol></div>
   <section class="box" id="siteBox"></section>
   <section class="box"><h2>Timeline</h2>
-    <label>Heading (small text under the top bar)</label><input type="text" id="heading">
+    <label for="heading">Heading (small text under the top bar)</label><input type="text" id="heading">
   </section>
   <div id="cards"></div>
   <button id="add" class="primary">+ Add card</button>
@@ -89,7 +90,9 @@ textarea{min-height:110px;resize:vertical}
   }
   function imageField(obj, key){
     var img = el('img',{alt:''}); img.src = obj[key] || '';
-    var path = el('input',{type:'text'}); path.value = (obj[key]||'').indexOf('data:') === 0 ? '(uploaded image embedded)' : (obj[key]||'');
+    img.addEventListener('error', function(){ img.style.outline = '2px solid #c33'; img.title = 'Image not found'; });
+    img.addEventListener('load', function(){ img.style.outline = ''; img.title = ''; });
+    var path = el('input',{type:'text',id:'f'+(++uid)}); path.value = (obj[key]||'').indexOf('data:') === 0 ? '(uploaded image embedded)' : (obj[key]||'');
     path.addEventListener('input', function(){ obj[key] = path.value; img.src = path.value; save(); });
     var file = el('input',{type:'file',accept:'image/*',hidden:''});
     file.addEventListener('change', function(){
@@ -107,7 +110,7 @@ textarea{min-height:110px;resize:vertical}
       };
       r.readAsDataURL(f);
     });
-    return [el('label',{text:'Image (path in assets/ or upload)'}),
+    return [el('label',{text:'Image (path in assets/ or upload)',for:path.id}),
       el('div',{class:'img-row'},[img, el('div',{class:'f'},[path, el('div',{class:'tools'},[el('button',{text:'Upload image…',onclick:function(){file.click();}}), file])])])];
   }
 
@@ -128,7 +131,7 @@ textarea{min-height:110px;resize:vertical}
         el('div',{class:'tools'},[
           el('button',{text:'↑',title:'Move earlier',onclick:function(){ mv(i,-1); }}),
           el('button',{text:'↓',title:'Move later',onclick:function(){ mv(i,1); }}),
-          el('button',{class:'danger',text:'Delete',onclick:function(){ if(confirm('Delete this card?')){ data.timeline.cards.splice(i,1); save(); renderCards(); } }})])]));
+          el('button',{class:'danger',text:'Delete',onclick:function(){ if(data.timeline.cards.length<2){ alert('Keep at least one card.'); return; } if(confirm('Delete this card?')){ data.timeline.cards.splice(i,1); save(); renderCards(); } }})])]));
       var yr = field('Year / date label', c, 'year'), tt = field('Card title', c, 'title');
       it.appendChild(el('div',{class:'row'},[el('div',{},yr), el('div',{},tt)]));
       field('Body text', c, 'body', true).forEach(function(x){ it.appendChild(x); });
@@ -151,8 +154,7 @@ textarea{min-height:110px;resize:vertical}
   $('download').addEventListener('click', function(){
     var txt = '/* EXHIBIT CONTENT — edit via admin.html, or by hand. Exported ' + new Date().toISOString().slice(0,10) + ' */\nwindow.EXHIBIT = ' + JSON.stringify(data, null, 2) + ';\n';
     var a = el('a',{href:URL.createObjectURL(new Blob([txt],{type:'text/javascript'})),download:'content.js'}); a.click();
-    try { localStorage.removeItem(KEY); } catch(e){}
-    $('status').textContent = 'Downloaded. Replace js/content.js with this file, then push. Draft cleared.';
+    $('status').textContent = 'Downloaded. Replace js/content.js with it, push, then click Discard draft.';
   });
   $('discard').addEventListener('click', function(){
     if(!confirm('Discard unsaved edits and reload the published content?')) return;

@@ -5,4 +5,4 @@
 <rect x="40" y="40" width="720" height="720" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2"/>
 <circle cx="400" cy="340" r="110" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="3"/>
 <path d="M240 620 Q400 440 560 620" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="3"/>
-<text x="400" y="720" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="30" letter-spacing="6" fill="#fff" fill-opacity=".85">MOCK ARTIFACT · PORTRAIT</text></svg>
+</svg>
