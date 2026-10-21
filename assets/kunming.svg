@@ -2,6 +2,6 @@
 <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#bfc9a6"/><stop offset="1" stop-color="#4f5b43"/></linearGradient>
 <pattern id="p" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#000" opacity=".12"/></pattern></defs>
 <rect width="800" height="800" fill="url(#g)"/><rect width="800" height="800" fill="url(#p)"/>
-<rect x="40" y="40" width="720" height="720" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2"/>
+<rect x="40" y="40" width="720" height="720" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="2"/>
 <g stroke="#fff" stroke-opacity=".75" stroke-width="3"><path d="M180 520 Q300 300 400 440 T620 380" fill="none"/><circle cx="560" cy="270" r="40" fill="none"/></g>
 <text x="400" y="720" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="30" letter-spacing="6" fill="#fff" fill-opacity=".85">MOCK ARTIFACT · KUNMING</text></svg>
