@@ -52,13 +52,10 @@
       el.style.filter = 'blur(' + ((1 - e) * 2.5).toFixed(2) + 'px) saturate(' + (0.6 + 0.4 * e).toFixed(2) + ')';
       el.style.opacity = (0.55 + 0.45 * e).toFixed(2);
       el.style.zIndex = Math.round(e * 10);
-      var tk = ticks[i], half = S / 2 * sc + (14 + 12 * e);
-      tk.style.transform = 'translate(' + x + 'px,' + half + 'px) translateX(-50%)';
-      tk.style.fontSize = (0.78 + 0.95 * e).toFixed(3) + 'rem';
-      tk.style.fontWeight = e > 0.5 ? 700 : 400;
-      tk.style.color = e > 0.5 ? 'var(--ink)' : '';
-      // on phones the focused card covers its neighbours' dates
-      tk.style.opacity = mobile && d > 0.5 ? clamp((d - 1.1) / 0.5, 0, 1).toFixed(2) : 1;
+      // every date sits on one row beneath the enlarged card, so nothing covers a neighbour's label
+      var tk = ticks[i], row = S * BIG / 2 + 18;
+      tk.style.transform = 'translate(' + x + 'px,' + row + 'px) translateX(-50%)';
+      tk.style.opacity = (1 - e).toFixed(2);   // the focused card's date is shown by #bigYear, above the haze
     }
     var idx = clamp(Math.round(pos), 0, n - 1);
     if(idx !== shown) setActive(idx);
@@ -72,6 +69,8 @@
     $('count').textContent = String(idx + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0');
     $('prev').disabled = false; $('next').disabled = idx === n - 1;
     var c = cards[idx];
+    var by = $('bigYear'); by.classList.add('swap');
+    setTimeout(function(){ by.textContent = c.year; by.classList.remove('swap'); }, first ? 0 : 120);
     function fill(){
       $('iTitle').textContent = c.title; $('iBody').textContent = c.body;
       $('iCap').textContent = c.caption || '';

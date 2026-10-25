@@ -44,7 +44,9 @@ body.leaving{opacity:0;transition:opacity .5s ease}
 .card.active{cursor:default;box-shadow:0 24px 60px rgba(40,30,10,.22);z-index:5}
 .tick{position:absolute;top:0;left:0;font-size:.78rem;letter-spacing:.2em;color:var(--muted);white-space:nowrap;font-weight:400;will-change:transform}
 .spot{position:absolute;z-index:4;pointer-events:none;left:var(--cx);top:58%;width:calc(var(--s)*var(--big));height:calc(var(--s)*var(--big));transform:translate(-50%,-50%);box-shadow:0 0 0 150vmax rgba(247,245,240,.62);transition:none}
-.info{position:fixed;z-index:10;left:calc(var(--cx) + var(--s)*var(--big)/2 + 4vw);right:6vw;top:50%;transform:translateY(-62%);pointer-events:none}
+.info{position:fixed;z-index:10;left:calc(var(--cx) + var(--s)*var(--big)/2 + 4vw);right:6vw;top:auto;bottom:calc(42% + var(--s)/2 + 1.6rem);max-height:calc(58% - var(--s)/2 - 6rem);overflow:hidden;pointer-events:none}
+.bigyear{position:fixed;z-index:8;left:var(--cx);top:calc(58% + var(--s)*var(--big)/2 + 16px);transform:translateX(-50%);font-weight:700;font-size:clamp(1.4rem,2.4vw,2rem);letter-spacing:.14em;color:var(--ink);transition:opacity .25s ease;pointer-events:none;white-space:nowrap}
+.bigyear.swap{opacity:0}
 .info .inner{transition:opacity .45s ease,transform .45s ease}
 .info.swap .inner{opacity:0;transform:translateY(10px)}
 .info h2{font-weight:700;font-size:clamp(1.8rem,3.6vw,3.2rem);line-height:1.1;letter-spacing:-.01em;margin:0 0 1.1rem}
@@ -65,9 +67,9 @@ body.leaving{opacity:0;transition:opacity .5s ease}
 .nav button:disabled{opacity:.3;cursor:default}
 .heading{position:fixed;left:2.4rem;top:4.4rem;z-index:10;font-weight:300;font-size:.95rem;color:var(--muted);letter-spacing:.04em}
 @media (max-width:760px){
-  .info{left:6vw;right:6vw;top:auto;bottom:6.5rem;transform:none;background:linear-gradient(0deg,rgba(247,245,240,.96) 70%,transparent);padding-top:1.2rem}
+  .info{left:6vw;right:6vw;top:auto;bottom:6.5rem;transform:none;max-height:none;background:linear-gradient(0deg,rgba(247,245,240,.96) 70%,transparent);padding-top:1.2rem}
   .info .body{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
-  .axis,.track{top:30%}.spot{top:30%}
+  .axis,.track{top:30%}.spot{top:30%}.bigyear{top:calc(30% + var(--s)*var(--big)/2 + 12px)}.info{max-height:none;overflow:visible}
   .topbar,.hud{padding-left:1.2rem;padding-right:1.2rem}.heading{left:1.2rem}
 }
 @media (prefers-reduced-motion:reduce){
