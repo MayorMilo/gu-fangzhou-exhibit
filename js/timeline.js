@@ -28,16 +28,27 @@
   /* pos = where the camera is (fractional card index); target = where it is heading */
   var pos = 0, target = 0, shown = -1, last = 0, running = false;
 
+  var infoMax = 200;
   function layout(){
-    var w = window.innerWidth; mobile = w <= 760;
-    S = mobile ? 70 : Math.max(96, Math.min(150, w * 0.1));
-    BIG = mobile ? 2.6 : Math.min(3.2, (window.innerHeight * 0.5) / S);
+    var w = window.innerWidth, h = window.innerHeight; mobile = w <= 760 && h >= 640; stage.classList.toggle('mobile', mobile);
+    var row = Math.round(h * (mobile ? 0.3 : 0.58));
+    S = mobile ? 70 : Math.max(80, Math.min(150, w * 0.1, h * 0.17));
+    BIG = mobile ? 2.6 : Math.min(3.2, (h * 0.41) / S);
     GAP = S * (mobile ? 1.5 : 1.7);
     CX = mobile ? w / 2 : Math.max(w * 0.27, S * BIG / 2 + 48);
     stage.style.setProperty('--s', S + 'px');
     stage.style.setProperty('--big', BIG);
     stage.style.setProperty('--cx', CX + 'px');
+    stage.style.setProperty('--row', row + 'px');
+    // room for the text block: above the card row on desktop, between the year and the HUD on phones
+    infoMax = mobile ? h - 104 - (row + S * BIG / 2 + 52) - 8 : row - S / 2 - 26 - 100;
+    if(shown >= 0) fitInfo();
     draw();
+  }
+  function fitInfo(){
+    var b = $('iBody'), inner = info.firstElementChild;
+    info.classList.toggle('compact', infoMax < 175);
+    for(var l = 16; l >= 1; l--){ b.style.webkitLineClamp = l; if(inner.offsetHeight <= infoMax) break; }
   }
 
   function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
@@ -77,6 +88,7 @@
       $('iSrc').textContent = c.source ? 'Source: ' + c.source : '';
       $('iDraft').hidden = !!(c.source && c.source.trim());
       $('iBack').hidden = idx !== n - 1; $('iBack').href = 'index.html' + draftSuffix;
+      fitInfo();
       info.classList.remove('swap');
     }
     clearTimeout(swapTimer);
@@ -112,7 +124,7 @@
     var t = target + delta;
     if(t < 0){
       var now = Date.now();
-      if(delta < 0 && now > overCool){ over += -delta; if(over > 0.35){ over = 0; overCool = now + 900; tryLeave(); } }
+      if(delta < 0 && now > overCool){ over += -delta; if(over > 0.25){ over = 0; overCool = now + 900; tryLeave(); } }
       t = 0;
     } else { over = 0; if(t > 0.1) disarm(); }
     target = clamp(t, 0, n - 1);
