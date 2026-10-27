@@ -11,10 +11,7 @@ body.leaving{opacity:0;transition:opacity .5s ease}
 
 /* ---------- Title page ---------- */
 .title-page{position:relative;height:100vh;width:100%;overflow:hidden;
-  background:radial-gradient(120% 90% at 70% 20%,#ffffff 0%,#f7f5f0 65%)}
-.mountains{position:absolute;left:0;right:0;bottom:0;width:100%;height:58vh}
-.mountains path{fill:none;stroke:var(--ink);stroke-opacity:.8;stroke-width:1.4;vector-effect:non-scaling-stroke}
-.mountains path:nth-child(2){stroke-opacity:.6}.mountains path:nth-child(3){stroke-opacity:.45}
+  background:#fff}
 .hero{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(1rem,3vh,2rem);padding:4vh 6vw 14vh;text-align:center}
 .portrait{order:2;width:clamp(110px,20vh,210px);aspect-ratio:1;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:#eee;
   box-shadow:0 0 0 10px rgba(0,0,0,.03)}
@@ -73,7 +70,6 @@ body.leaving{opacity:0;transition:opacity .5s ease}
   .track,.card,.bar i,.info .inner,.scroll-cue svg{transition:none!important;animation:none!important}
 }
 
-@media (max-height:700px){.mountains{height:38vh}.hero{padding-bottom:16vh}}
-
+@media (max-height:700px){
 @media (max-height:700px){.info h2{font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:.6rem}.info .cap{margin-top:.8rem}.info .back{margin-top:.8rem;padding:.6rem 1.1rem}.info .draft{margin-top:.5rem}}
 .info.compact .cap{display:none}.info.compact h2{font-size:1.3rem;margin-bottom:.4rem}.info.compact .draft,.info.compact .back{margin-top:.5rem}
