@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Citations — Gu Fangzhou Exhibit</title>
-<link rel="stylesheet" href="css/style.css?v=4">
+<link rel="stylesheet" href="css/style.css?v=5">
 <style>
 html,body{overflow:auto;height:auto}
 .cite{max-width:46rem;margin:0 auto;padding:6.5rem 1.5rem 5rem}
 .cite h1{font-weight:700;font-size:clamp(2rem,4vw,3rem);letter-spacing:-.01em;margin-bottom:2.2rem}
 .cite h2{font-size:.78rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin:2.6rem 0 1rem;padding-bottom:.6rem;border-bottom:1px solid var(--line)}
 .cite ol,.cite ul{list-style:none}
-.cite li{padding:.7rem 0;line-height:1.5;font-size:1rem}
+.cite li{padding:.7rem 0;line-height:1.5;font-size:1rem;overflow-wrap:anywhere}
 .cite .ref{padding-left:1.6rem;text-indent:-1.6rem}
 .cite a{color:var(--accent);text-underline-offset:3px}
 .cite .num{display:inline-block;width:1.6rem;text-indent:0;font-weight:700;color:var(--muted);font-size:.85rem}
@@ -33,8 +33,8 @@ html,body{overflow:auto;height:auto}
   <h2>Image credits by card</h2>
   <ol id="credits"></ol>
 </main>
-<script src="js/content.js?v=4"></script>
-<script src="js/data.js?v=4"></script>
+<script src="js/content.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
 <script>
 (function(){
   function el(tag, cls, text){ var e = document.createElement(tag); if(cls) e.className = cls; if(text) e.textContent = text; return e; }
@@ -45,7 +45,13 @@ html,body{overflow:auto;height:auto}
   refs.forEach(function(r){
     var li = el('li','ref');
     if(r.url){ var a = el('a', '', r.text); a.href = r.url; a.target = '_blank'; a.rel = 'noopener'; li.appendChild(a); }
-    else li.textContent = r.text;
+    else {
+      // turn any URL inside the citation text into a link (trailing full stop stays outside it)
+      r.text.split(/(https?:\/\/[^\s]+?)(?=\.?(?:\s|$))/).forEach(function(part, k){
+        if(k % 2){ var a = el('a', '', part); a.href = part; a.target = '_blank'; a.rel = 'noopener'; li.appendChild(a); }
+        else li.appendChild(document.createTextNode(part));
+      });
+    }
     list.appendChild(li);
   });
   var cr = document.getElementById('credits');

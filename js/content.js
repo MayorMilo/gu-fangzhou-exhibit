@@ -119,31 +119,23 @@ window.EXHIBIT = {
   },
   "references": [
     {
-      "text": "Public domain, via Wikimedia Commons",
+      "text": "Huang, Fu-Min, et al. “Gu Fangzhou: A Monument to Polio Elimination in China.” Chinese Medical Sciences Journal, vol. 41, no. 2, June 2026, pp. 73–76. ScienceDirect, https://doi.org/10.1016/j.cmsj.2026.07.002.",
       "url": ""
     },
     {
-      "text": "China Christian Daily",
+      "text": "Song, Qifan, et al. “Commemorating the Centenary of Fangzhou Gu.” China CDC Weekly, vol. 8, no. 28, July 2026, pp. 898–900. PubMed Central, https://doi.org/10.46234/ccdcw2026.141.",
       "url": ""
     },
     {
-      "text": "Chinese Academy of Medical Sciences",
+      "text": "Telling the Story of the “Sugar Pill Grandpa” to the World | Commemorative Event for the 100th Anniversary of the Birth of Gu Fangzhou to Be Held in Switzerland and France. https://english.cast.org.cn/xkx/fzlm/syzsxx/art/2026/art_bbbe862442adb29a4ad41ae597586def.html. Accessed 12 Oct. 2026.",
       "url": ""
     },
     {
-      "text": "Global Times",
+      "text": "Wu, Jun, Yuan Zhao, et al. “Dedication to a Lifelong Mission: Gu Fangzhou and the Chinese Road to Polio Elimination.” Chinese Medical Sciences Journal, vol. 41, no. 2, June 2026, pp. 85–88. ScienceDirect, https://doi.org/10.1016/j.cmsj.2026.08.003.",
       "url": ""
     },
     {
-      "text": "Wired",
-      "url": ""
-    },
-    {
-      "text": "China Daily",
-      "url": ""
-    },
-    {
-      "text": "Peking University",
+      "text": "Wu, Jun, Dexiang Dong, et al. “Just for Chinese People’s Stood up—Prof. Fangzhou Gu, Father of ‘Sugar Pills.’” Protein & Cell, vol. 11, no. 4, Apr. 2020, pp. 231–34. PubMed Central, https://doi.org/10.1007/s13238-019-00669-7.",
       "url": ""
     }
   ]
