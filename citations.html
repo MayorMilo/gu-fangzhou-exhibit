@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Citations — Gu Fangzhou Exhibit</title>
+<link rel="stylesheet" href="css/style.css?v=3">
+<style>
+html,body{overflow:auto;height:auto}
+.cite{max-width:46rem;margin:0 auto;padding:6.5rem 1.5rem 5rem}
+.cite h1{font-weight:700;font-size:clamp(2rem,4vw,3rem);letter-spacing:-.01em;margin-bottom:2.2rem}
+.cite h2{font-size:.78rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin:2.6rem 0 1rem;padding-bottom:.6rem;border-bottom:1px solid var(--line)}
+.cite ol,.cite ul{list-style:none}
+.cite li{padding:.7rem 0;line-height:1.5;font-size:1rem}
+.cite .ref{padding-left:1.6rem;text-indent:-1.6rem}
+.cite a{color:var(--accent);text-underline-offset:3px}
+.cite .num{display:inline-block;width:1.6rem;text-indent:0;font-weight:700;color:var(--muted);font-size:.85rem}
+.cite .t{font-weight:700}
+.cite .meta{display:block;color:var(--muted);font-size:.88rem;margin-top:.15rem}
+.cite .empty{color:var(--muted)}
+.topbar{background:linear-gradient(var(--bg) 60%,transparent)}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="eyebrow" id="back" href="timeline.html">← Back to timeline</a>
+  <a class="eyebrow" id="home" href="index.html">Gu Fangzhou</a>
+</header>
+<main class="cite">
+  <h1>Citations</h1>
+  <h2>References</h2>
+  <ul id="refs"></ul>
+  <h2>Image credits by card</h2>
+  <ol id="credits"></ol>
+</main>
+<script src="js/content.js?v=3"></script>
+<script src="js/data.js?v=3"></script>
+<script>
+(function(){
+  function el(tag, cls, text){ var e = document.createElement(tag); if(cls) e.className = cls; if(text) e.textContent = text; return e; }
+  document.getElementById('back').href = 'timeline.html' + draftSuffix;
+  document.getElementById('home').href = 'index.html' + draftSuffix;
+  var refs = DATA.references || [], list = document.getElementById('refs');
+  if(!refs.length) list.appendChild(el('li','empty','No references added yet.'));
+  refs.forEach(function(r){
+    var li = el('li','ref');
+    if(r.url){ var a = el('a', '', r.text); a.href = r.url; a.target = '_blank'; a.rel = 'noopener'; li.appendChild(a); }
+    else li.textContent = r.text;
+    list.appendChild(li);
+  });
+  var cr = document.getElementById('credits');
+  DATA.timeline.cards.forEach(function(c, i){
+    var li = el('li','ref'), n = el('span','num', String(i + 1));
+    var a = el('a','t', c.title); a.href = 'timeline.html' + draftSuffix + '#' + (i + 1);
+    li.appendChild(n); li.appendChild(a);
+    var m = el('span','meta', [c.year, c.caption, c.source ? 'Source: ' + c.source : ''].filter(Boolean).join(' · '));
+    m.style.textIndent = '0'; m.style.paddingLeft = '1.6rem'; li.appendChild(m);
+    cr.appendChild(li);
+  });
+})();
+</script>
+</body>
+</html>

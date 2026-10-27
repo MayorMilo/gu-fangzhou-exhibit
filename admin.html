@@ -58,10 +58,11 @@ textarea{min-height:110px;resize:vertical}
   <section class="box"><h2>Timeline</h2>
     <label for="heading">Heading (small text under the top bar)</label><input type="text" id="heading">
   </section>
+  <section class="box"><h2>References (shown on the Citations page)</h2><div id="refs"></div><div class="tools"><button id="addRef">+ Add reference</button></div></section>
   <div id="cards"></div>
   <button id="add" class="primary">+ Add card</button>
 </main>
-<script src="js/content.js"></script>
+<script src="js/content.js?v=3"></script>
 <script>
 (function(){
   var KEY = 'exhibit-draft';
@@ -141,6 +142,18 @@ textarea{min-height:110px;resize:vertical}
       wrap.appendChild(it);
     });
   }
+  function renderRefs(){
+    data.references = data.references || [];
+    var w = $('refs'); w.innerHTML = '';
+    data.references.forEach(function(r, i){
+      var row = el('div',{class:'item'});
+      field('Full citation', r, 'text', true).forEach(function(x){ row.appendChild(x); });
+      field('Link (optional URL)', r, 'url').forEach(function(x){ row.appendChild(x); });
+      row.appendChild(el('div',{class:'tools'},[el('button',{class:'danger',text:'Delete',onclick:function(){ data.references.splice(i,1); save(); renderRefs(); }})]));
+      w.appendChild(row);
+    });
+  }
+  $('addRef').addEventListener('click', function(){ (data.references = data.references || []).push({text:'',url:''}); save(); renderRefs(); });
   function mv(i, d){
     var a = data.timeline.cards, j = i + d; if(j<0||j>=a.length) return;
     var t = a[i]; a[i] = a[j]; a[j] = t; save(); renderCards();
@@ -168,12 +181,12 @@ textarea{min-height:110px;resize:vertical}
     r.onload = function(){
       try {
         var m = r.result.match(/window\.EXHIBIT\s*=\s*([\s\S]*?);?\s*$/);
-        data = JSON.parse(m ? m[1] : r.result); save(); renderSite(); renderCards();
+        data = JSON.parse(m ? m[1] : r.result); save(); renderSite(); renderCards(); renderRefs();
       } catch(e){ alert('Could not read that file: ' + e.message); }
     };
     r.readAsText(f);
   });
-  renderSite(); renderCards();
+  renderSite(); renderCards(); renderRefs();
   if(restored) $('status').textContent = 'Restored your unsaved draft';
 })();
 </script>

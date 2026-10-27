@@ -73,3 +73,4 @@ body.leaving{opacity:0;transition:opacity .5s ease}
 @media (max-height:700px){
 @media (max-height:700px){.info h2{font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:.6rem}.info .cap{margin-top:.8rem}.info .back{margin-top:.8rem;padding:.6rem 1.1rem}.info .draft{margin-top:.5rem}}
 .info.compact .cap{display:none}.info.compact h2{font-size:1.3rem;margin-bottom:.4rem}.info.compact .draft,.info.compact .back{margin-top:.5rem}
+.cite-link{position:absolute;right:2.4rem;bottom:2.2rem;z-index:3;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);text-decoration:none}.cite-link:hover{color:var(--ink)}

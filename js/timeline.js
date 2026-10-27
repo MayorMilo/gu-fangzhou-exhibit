@@ -10,6 +10,7 @@
   $('heading').textContent = DATA.timeline.heading;
   $('dates').textContent = DATA.site.dates;
   $('home').href = 'index.html' + draftSuffix;
+  $('cites').href = 'citations.html' + draftSuffix;
 
   var els = [], ticks = [];
   var S, BIG, GAP, CX, mobile;
@@ -172,5 +173,7 @@
   $('prev').addEventListener('click', function(){ var c = Math.round(target); if(c === 0) tryLeave(); else goTo(c - 1); });
   window.addEventListener('resize', layout);
   window.addEventListener('pageshow', function(){ document.body.classList.remove('leaving'); });
+  var hm = /^#(\d+)$/.exec(location.hash);
+  if(hm){ pos = target = clamp(parseInt(hm[1], 10) - 1, 0, n - 1); }
   layout();
 })();

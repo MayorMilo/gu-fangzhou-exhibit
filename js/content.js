@@ -116,5 +116,35 @@ window.EXHIBIT = {
         "source": "Peking University"
       }
     ]
-  }
+  },
+  "references": [
+    {
+      "text": "Public domain, via Wikimedia Commons",
+      "url": ""
+    },
+    {
+      "text": "China Christian Daily",
+      "url": ""
+    },
+    {
+      "text": "Chinese Academy of Medical Sciences",
+      "url": ""
+    },
+    {
+      "text": "Global Times",
+      "url": ""
+    },
+    {
+      "text": "Wired",
+      "url": ""
+    },
+    {
+      "text": "China Daily",
+      "url": ""
+    },
+    {
+      "text": "Peking University",
+      "url": ""
+    }
+  ]
 };
