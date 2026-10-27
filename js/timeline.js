@@ -79,7 +79,7 @@
     var first = shown < 0; shown = idx;
     els.forEach(function(e, i){ e.classList.toggle('active', i === idx); });
     $('count').textContent = String(idx + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0');
-    $('prev').disabled = false; $('next').disabled = idx === n - 1;
+    $('prev').disabled = false; $('next').disabled = false;
     var c = cards[idx];
     var by = $('bigYear'); by.classList.add('swap');
     setTimeout(function(){ by.textContent = c.year; by.classList.remove('swap'); }, first ? 0 : 120);
@@ -89,6 +89,7 @@
       $('iSrc').textContent = c.source ? 'Source: ' + c.source : '';
       $('iDraft').hidden = !!(c.source && c.source.trim());
       $('iBack').hidden = idx !== n - 1; $('iBack').href = 'index.html' + draftSuffix;
+      $('iCite').hidden = idx !== n - 1; $('iCite').href = 'citations.html' + draftSuffix;
       fitInfo();
       info.classList.remove('swap');
     }
@@ -107,31 +108,31 @@
   }
   function run(){ if(!running){ running = true; last = performance.now(); requestAnimationFrame(tick); } }
 
-  /* leaving: pushing past card 1 twice returns to the title page */
-  var armed = false, armTimer, over = 0, overCool = 0;
-  function tryLeave(){
-    if(armed){ leave(); return; }
-    armed = true; $('leaveHint').classList.add('on');
-    clearTimeout(armTimer); armTimer = setTimeout(function(){ armed = false; $('leaveHint').classList.remove('on'); }, 2200);
+  /* leaving: pushing past card 1 twice returns to the title page; past the last card twice opens the citations */
+  var armed = null, armTimer, over = 0, overCool = 0;
+  var HINTS = {start: 'Scroll up again to return to the title', end: 'Scroll again to continue to the citations'};
+  function tryExit(kind){
+    if(armed === kind){ exitTo(kind); return; }
+    armed = kind; $('leaveHint').textContent = HINTS[kind]; $('leaveHint').classList.add('on');
+    clearTimeout(armTimer); armTimer = setTimeout(disarm, 2200);
   }
-  function leave(){
+  function exitTo(kind){
     document.body.classList.add('leaving');
-    setTimeout(function(){ location.href = 'index.html' + draftSuffix; }, 450);
+    setTimeout(function(){ location.href = (kind === 'end' ? 'citations.html' : 'index.html') + draftSuffix; }, 450);
   }
-  function disarm(){ armed = false; $('leaveHint').classList.remove('on'); }
+  function disarm(){ armed = null; $('leaveHint').classList.remove('on'); }
 
   function move(delta){            // free movement, in cards
     if(g0 === null) g0 = Math.round(target);
-    var t = target + delta;
-    if(t < 0){
-      var now = Date.now();
-      if(delta < 0 && now > overCool){ over += -delta; if(over > 0.25){ over = 0; overCool = now + 900; tryLeave(); } }
-      t = 0;
-    } else { over = 0; if(t > 0.1) disarm(); }
+    var t = target + delta, now = Date.now();
+    if(t < 0 || t > n - 1){
+      var kind = t < 0 ? 'start' : 'end';
+      if(now > overCool){ over += Math.abs(delta); if(over > 0.25){ over = 0; overCool = now + 900; tryExit(kind); } }
+    } else { over = 0; if(t > 0.1 && t < n - 1.1) disarm(); }
     target = clamp(t, 0, n - 1);
     run();
   }
-  function goTo(i){ target = clamp(i, 0, n - 1); if(i > 0) disarm(); run(); }
+  function goTo(i){ target = clamp(i, 0, n - 1); if(i > 0 && i < n - 1) disarm(); run(); }
   var g0 = null;                   // card the current gesture started on
   function snap(){
     var r = Math.round(target);
@@ -164,16 +165,16 @@
     var t = e.target && e.target.tagName, onCtl = t === 'BUTTON' || t === 'A';
     if(onCtl && (e.key === ' ' || e.key === 'Enter')) return;
     var cur = Math.round(target);
-    if(['ArrowDown','ArrowRight','PageDown',' '].indexOf(e.key) > -1){ e.preventDefault(); goTo(cur + 1); }
-    if(['ArrowUp','ArrowLeft','PageUp'].indexOf(e.key) > -1){ e.preventDefault(); if(cur === 0) tryLeave(); else goTo(cur - 1); }
+    if(['ArrowDown','ArrowRight','PageDown',' '].indexOf(e.key) > -1){ e.preventDefault(); if(cur === n - 1) tryExit('end'); else goTo(cur + 1); }
+    if(['ArrowUp','ArrowLeft','PageUp'].indexOf(e.key) > -1){ e.preventDefault(); if(cur === 0) tryExit('start'); else goTo(cur - 1); }
     if(e.key === 'Home') goTo(0);
     if(e.key === 'End') goTo(n - 1);
   });
-  $('next').addEventListener('click', function(){ goTo(Math.round(target) + 1); });
-  $('prev').addEventListener('click', function(){ var c = Math.round(target); if(c === 0) tryLeave(); else goTo(c - 1); });
+  $('next').addEventListener('click', function(){ var c = Math.round(target); if(c === n - 1) exitTo('end'); else goTo(c + 1); });
+  $('prev').addEventListener('click', function(){ var c = Math.round(target); if(c === 0) tryExit('start'); else goTo(c - 1); });
   window.addEventListener('resize', layout);
   window.addEventListener('pageshow', function(){ document.body.classList.remove('leaving'); });
-  var hm = /^#(\d+)$/.exec(location.hash);
-  if(hm){ pos = target = clamp(parseInt(hm[1], 10) - 1, 0, n - 1); }
+  var hm = /^#(\d+|end)$/.exec(location.hash);
+  if(hm){ pos = target = hm[1] === 'end' ? n - 1 : clamp(parseInt(hm[1], 10) - 1, 0, n - 1); }
   layout();
 })();

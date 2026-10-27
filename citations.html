@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Citations — Gu Fangzhou Exhibit</title>
-<link rel="stylesheet" href="css/style.css?v=3">
+<link rel="stylesheet" href="css/style.css?v=4">
 <style>
 html,body{overflow:auto;height:auto}
 .cite{max-width:46rem;margin:0 auto;padding:6.5rem 1.5rem 5rem}
@@ -33,12 +33,12 @@ html,body{overflow:auto;height:auto}
   <h2>Image credits by card</h2>
   <ol id="credits"></ol>
 </main>
-<script src="js/content.js?v=3"></script>
-<script src="js/data.js?v=3"></script>
+<script src="js/content.js?v=4"></script>
+<script src="js/data.js?v=4"></script>
 <script>
 (function(){
   function el(tag, cls, text){ var e = document.createElement(tag); if(cls) e.className = cls; if(text) e.textContent = text; return e; }
-  document.getElementById('back').href = 'timeline.html' + draftSuffix;
+  document.getElementById('back').href = 'timeline.html' + draftSuffix + '#end';
   document.getElementById('home').href = 'index.html' + draftSuffix;
   var refs = DATA.references || [], list = document.getElementById('refs');
   if(!refs.length) list.appendChild(el('li','empty','No references added yet.'));
