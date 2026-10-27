@@ -69,7 +69,7 @@ textarea{min-height:110px;resize:vertical}
   var restored = false;
   try { var d = localStorage.getItem(KEY); if(d){ data = JSON.parse(d); restored = true; } } catch(e){}
   var $ = function(id){ return document.getElementById(id); };
-  var siteFields = [['name','Name'],['nameZh','Chinese name'],['dates','Life dates'],['tagline','Tagline'],['scrollHint','Scroll prompt text']];
+  var siteFields = [['name','Name'],['nameZh','Chinese name'],['dates','Life dates']];
 
   var uid = 0;
   function save(){

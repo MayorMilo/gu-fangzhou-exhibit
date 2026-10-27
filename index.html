@@ -12,15 +12,12 @@
   <section class="hero">
     <img class="portrait" id="portrait" alt="Portrait of Gu Fangzhou">
     <div class="name-block">
-      <p class="eyebrow">Digital Exhibit</p>
       <h1 id="name"></h1>
       <p class="name-zh" id="nameZh"></p>
       <p class="dates" id="dates"></p>
-      <p class="tagline" id="tagline"></p>
     </div>
   </section>
   <button class="scroll-cue" id="cue" aria-label="Enter the exhibit">
-    <span id="hint"></span>
     <svg width="22" height="34" viewBox="0 0 22 34" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 2v28M3 22l8 9 8-9"/></svg>
   </button>
 </main>
@@ -32,8 +29,6 @@
   document.getElementById('name').textContent = s.name;
   document.getElementById('nameZh').textContent = s.nameZh || '';
   document.getElementById('dates').textContent = s.dates;
-  document.getElementById('tagline').textContent = s.tagline;
-  document.getElementById('hint').textContent = s.scrollHint;
   var p = document.getElementById('portrait'); p.src = s.portrait;
   if(!s.nameZh) document.getElementById('nameZh').hidden = true;
 
